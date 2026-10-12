@@ -1,0 +1,5 @@
+metodo,casos_apontados,precisao,recall
+Regra fixa (SQL q08),100,0.74,0.771
+Z-score por veículo,79,0.633,0.521
+Isolation Forest,86,0.698,0.625
+Consenso (2 ou mais métodos),76,0.895,0.708

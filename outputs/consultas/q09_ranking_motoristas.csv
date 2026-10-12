@@ -1,0 +1,88 @@
+id_motorista,nome,filial,km_abastecido,km_l_real,km_l_esperado,desvio_consumo_pct,viagens_vazias,pct_conformidade_eixo,quartil_eficiencia
+M006,Sérgio Nascimento,Jundiaí-SP,20674.0,3.932,3.7,6.3,155.0,89.0,1
+M058,Fernando Silva,Belo Horizonte-MG,120461.0,2.509,2.4,4.5,75.0,80.0,1
+M074,Adriana Santos,Curitiba-PR,114582.0,2.488,2.4,3.6,98.0,91.8,1
+M056,Roberto Oliveira,Belo Horizonte-MG,141197.0,2.766,2.7,2.4,95.0,81.1,1
+M046,Renato Santos,Ribeirão Preto-SP,80917.0,1.841,1.8,2.3,111.0,64.0,1
+M067,Patrícia Almeida,Curitiba-PR,48703.0,3.781,3.7,2.2,159.0,76.7,1
+M077,Fernando Araújo,Curitiba-PR,105834.0,2.449,2.4,2.1,92.0,77.2,1
+M013,Paulo Nascimento,Jundiaí-SP,96255.0,2.737,2.7,1.4,89.0,93.3,1
+M051,Sérgio Santos,Belo Horizonte-MG,11017.0,3.737,3.7,1.0,92.0,100.0,1
+M040,Rodrigo Souza,Ribeirão Preto-SP,66968.0,2.114,2.1,0.6,93.0,58.1,1
+M079,Eduardo Carvalho,Curitiba-PR,105977.0,2.112,2.1,0.6,95.0,87.4,1
+M038,Marcos Rodrigues,Ribeirão Preto-SP,78952.0,2.39,2.4,-0.4,117.0,76.9,1
+M078,Juliana Souza,Curitiba-PR,109266.0,2.092,2.1,-0.4,89.0,53.9,1
+M027,Sérgio Almeida,Jundiaí-SP,102462.0,1.787,1.8,-0.7,100.0,89.0,1
+M001,Valdir Almeida,Jundiaí-SP,26656.0,4.562,4.6,-0.8,,,1
+M012,Rodrigo Nascimento,Jundiaí-SP,95285.0,2.669,2.7,-1.1,90.0,92.2,1
+M068,Juliana Costa,Curitiba-PR,42205.0,3.654,3.7,-1.2,136.0,75.0,1
+M016,André Silva,Jundiaí-SP,110689.0,2.369,2.4,-1.3,88.0,62.5,1
+M004,Rodrigo Ribeiro,Jundiaí-SP,21833.0,4.532,4.6,-1.5,,,1
+M030,Rafael Rodrigues,Ribeirão Preto-SP,25016.0,4.531,4.6,-1.5,,,1
+M002,José Souza,Jundiaí-SP,21664.0,4.524,4.6,-1.7,,,1
+M057,Wagner Pereira,Belo Horizonte-MG,131381.0,2.351,2.4,-2.0,89.0,65.2,1
+M033,Renato Souza,Ribeirão Preto-SP,21735.0,3.614,3.7,-2.3,64.0,67.2,2
+M047,Rodrigo Souza,Belo Horizonte-MG,12781.0,4.491,4.6,-2.4,,,2
+M065,Antônio Araújo,Curitiba-PR,50469.0,4.487,4.6,-2.5,,,2
+M050,Fábio Silva,Belo Horizonte-MG,13870.0,3.604,3.7,-2.6,74.0,81.1,2
+M007,Rodrigo Araújo,Jundiaí-SP,25112.0,3.603,3.7,-2.6,157.0,90.4,2
+M048,Fernando Nascimento,Belo Horizonte-MG,11334.0,4.475,4.6,-2.7,,,2
+M042,Rafael Gomes,Ribeirão Preto-SP,74463.0,2.041,2.1,-2.8,108.0,82.4,2
+M083,Luiz Rocha,Curitiba-PR,64955.0,2.639,2.717,-2.9,66.0,56.1,2
+M044,Ricardo Ribeiro,Ribeirão Preto-SP,67743.0,1.739,1.8,-3.4,92.0,91.3,2
+M035,Roberto Carvalho,Ribeirão Preto-SP,67841.0,2.316,2.4,-3.5,96.0,90.6,2
+M062,Fernando Carvalho,Belo Horizonte-MG,124095.0,2.026,2.1,-3.5,81.0,85.2,2
+M064,André Ribeiro,Curitiba-PR,51288.0,4.438,4.6,-3.5,,,2
+M069,Juliana Santos,Curitiba-PR,40617.0,3.562,3.7,-3.7,132.0,66.7,2
+M010,André Lima,Jundiaí-SP,25496.0,3.557,3.7,-3.9,172.0,71.5,2
+M024,Rodrigo Souza,Jundiaí-SP,98037.0,2.017,2.1,-4.0,92.0,65.2,2
+M055,André Nascimento,Belo Horizonte-MG,135227.0,2.586,2.7,-4.2,87.0,96.6,2
+M060,André Fernandes,Belo Horizonte-MG,121455.0,2.296,2.4,-4.3,79.0,54.4,2
+M022,Márcio Gomes,Jundiaí-SP,105168.0,2.291,2.4,-4.5,96.0,88.5,2
+M036,Roberto Costa,Ribeirão Preto-SP,66234.0,2.289,2.4,-4.6,99.0,89.9,2
+M063,Diego Almeida,Belo Horizonte-MG,131568.0,1.995,2.1,-5.0,85.0,75.3,2
+M087,Eduardo Rodrigues,Curitiba-PR,64352.0,2.634,2.778,-5.2,86.0,47.7,2
+M003,Fernando Silva,Jundiaí-SP,22521.0,4.361,4.6,-5.2,,,2
+M043,Gilberto Fernandes,Ribeirão Preto-SP,72547.0,1.988,2.1,-5.3,115.0,40.9,3
+M008,Leandro Araújo,Jundiaí-SP,24537.0,3.495,3.7,-5.6,156.0,63.5,3
+M029,Diego Costa,Ribeirão Preto-SP,22329.0,4.344,4.6,-5.6,,,3
+M086,Luiz Rocha,Belo Horizonte-MG,89745.0,2.325,2.467,-5.7,79.0,53.2,3
+M018,Ricardo Santos,Jundiaí-SP,104760.0,2.261,2.4,-5.8,96.0,91.7,3
+M026,Gilberto Araújo,Jundiaí-SP,110750.0,1.975,2.1,-6.0,101.0,86.1,3
+M061,Valdir Araújo,Belo Horizonte-MG,136724.0,2.255,2.4,-6.0,97.0,66.0,3
+M072,Carlos Nascimento,Curitiba-PR,110732.0,2.53,2.7,-6.3,93.0,63.4,3
+M082,Rodrigo Lima,Belo Horizonte-MG,78691.0,2.291,2.446,-6.3,72.0,72.2,3
+M085,Edson Rocha,Ribeirão Preto-SP,55823.0,2.15,2.297,-6.4,93.0,76.3,3
+M073,Leandro Costa,Curitiba-PR,116638.0,2.522,2.7,-6.6,99.0,85.9,3
+M045,Fábio Silva,Ribeirão Preto-SP,66874.0,1.681,1.8,-6.6,110.0,46.4,3
+M054,Patrícia Ribeiro,Belo Horizonte-MG,123156.0,2.519,2.7,-6.7,76.0,77.6,3
+M011,Eduardo Oliveira,Jundiaí-SP,94027.0,2.515,2.7,-6.9,90.0,76.7,3
+M080,Marcos Rocha,Jundiaí-SP,132195.0,2.308,2.478,-6.9,159.0,75.5,3
+M015,Antônio Almeida,Jundiaí-SP,91951.0,2.512,2.7,-7.0,89.0,84.3,3
+M081,Edson Rodrigues,Ribeirão Preto-SP,52971.0,2.132,2.292,-7.0,94.0,37.2,3
+M025,André Oliveira,Jundiaí-SP,102083.0,1.949,2.1,-7.2,94.0,77.7,3
+M009,Ricardo Costa,Jundiaí-SP,24594.0,3.422,3.7,-7.5,177.0,64.4,3
+M075,Paulo Rodrigues,Curitiba-PR,114038.0,2.205,2.4,-8.1,102.0,60.8,3
+M034,Roberto Rocha,Ribeirão Preto-SP,27575.0,3.397,3.7,-8.2,84.0,17.9,3
+M021,Rafael Araújo,Jundiaí-SP,107901.0,2.193,2.4,-8.6,93.0,86.0,3
+M023,Renato Lima,Jundiaí-SP,108314.0,1.914,2.1,-8.8,98.0,66.3,4
+M017,Luiz Ribeiro,Jundiaí-SP,101360.0,2.186,2.4,-8.9,88.0,71.6,4
+M014,Eduardo Rodrigues,Jundiaí-SP,96936.0,2.45,2.7,-9.3,93.0,59.1,4
+M059,Carlos Almeida,Belo Horizonte-MG,138691.0,2.174,2.4,-9.4,91.0,89.0,4
+M070,José Costa,Curitiba-PR,49790.0,3.347,3.7,-9.5,140.0,70.0,4
+M041,Ricardo Silva,Ribeirão Preto-SP,74219.0,1.892,2.1,-9.9,103.0,50.5,4
+M039,José Almeida,Ribeirão Preto-SP,67665.0,2.162,2.4,-9.9,94.0,88.3,4
+M066,Eduardo Santos,Curitiba-PR,50695.0,4.139,4.6,-10.0,,,4
+M019,Edson Rocha,Jundiaí-SP,104088.0,2.159,2.4,-10.0,101.0,66.3,4
+M028,Eduardo Ribeiro,Jundiaí-SP,110761.0,1.616,1.8,-10.2,102.0,90.2,4
+M020,Carlos Santos,Jundiaí-SP,114254.0,2.146,2.4,-10.6,98.0,78.6,4
+M053,Adriana Rocha,Belo Horizonte-MG,13408.0,3.297,3.7,-10.9,82.0,91.5,4
+M049,Ricardo Araújo,Belo Horizonte-MG,14427.0,4.076,4.6,-11.4,,,4
+M071,Leandro Nascimento,Curitiba-PR,109481.0,2.386,2.7,-11.6,99.0,64.6,4
+M005,Sérgio Lima,Jundiaí-SP,25315.0,3.263,3.7,-11.8,160.0,69.4,4
+M032,Cláudio Gomes,Ribeirão Preto-SP,23135.0,3.252,3.7,-12.1,88.0,90.9,4
+M037,Wagner Oliveira,Ribeirão Preto-SP,75685.0,2.109,2.4,-12.1,98.0,49.0,4
+M084,Paulo Gomes,Jundiaí-SP,137929.0,2.128,2.441,-12.8,127.0,74.8,4
+M052,Marcos Lima,Belo Horizonte-MG,13873.0,3.219,3.7,-13.0,87.0,63.2,4
+M031,Gilberto Pereira,Ribeirão Preto-SP,23972.0,3.199,3.7,-13.6,90.0,77.8,4
+M076,Márcio Carvalho,Curitiba-PR,120681.0,2.072,2.4,-13.7,101.0,79.2,4

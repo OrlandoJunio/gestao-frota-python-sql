@@ -1,0 +1,15 @@
+tipo_veiculo,marca,modelo,qtd_veiculos,km_l_real,km_l_referencia,desvio_pct,ranking_eficiencia_no_tipo
+Bitrem,Scania,R 540,9,2.01,2.1,-4.3,1
+Bitrem,Volvo,FH 540,3,1.973,2.1,-6.0,2
+Carreta 2 eixos,Mercedes-Benz,Actros 2546,4,2.577,2.7,-4.6,1
+Carreta 2 eixos,Scania,R 450,5,2.576,2.7,-4.6,2
+Carreta 2 eixos,Volvo,FH 460,2,2.439,2.7,-9.7,3
+Carreta 3 eixos,Volvo,FH 540,9,2.292,2.4,-4.5,1
+Carreta 3 eixos,DAF,XF 480,7,2.251,2.4,-6.2,2
+Carreta 3 eixos,Scania,R 450,5,2.216,2.4,-7.7,3
+Rodotrem,Volvo,FH 540,2,1.753,1.8,-2.6,1
+Rodotrem,Scania,R 560,3,1.696,1.8,-5.8,2
+Toco,Volkswagen,Delivery 11.180,5,4.41,4.6,-4.1,1
+Toco,Mercedes-Benz,Accelo 1316,7,4.396,4.6,-4.4,2
+Truck,Mercedes-Benz,Atego 2430,8,3.555,3.7,-3.9,1
+Truck,Volkswagen,Constellation 24.280,10,3.45,3.7,-6.7,2

@@ -1,0 +1,402 @@
+<title>Painel de Frota TransLog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: faixa de filtros no topo, linha de KPIs, grade de 2 colunas que vira 1 no celular. */
+:root {
+  --bg: #f3f4f5;
+  --surface: #fcfcfb;
+  --ink: #11161b;
+  --ink-2: #4b5560;
+  --muted: #7b848e;
+  --line: #e0e3e6;
+  --accent: #e8a900;          /* amarelo de placa de estrada: só para marcadores */
+  --s1: #2a78d6;              /* série 1: combustível */
+  --s2: #eb6834;              /* série 2: pedágio */
+  --crit: #d03b3b;
+  --crit-bg: #fbe9e9;
+  --good: #0a7d0a;
+  --good-bg: #e6f4e6;
+  --warn-bg: #fdf3dc;
+  --warn-ink: #8a5b00;
+  --chip: #e9ecef;
+  --f-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1114; --surface: #171b1f; --ink: #f1f3f5; --ink-2: #b6bec7; --muted: #848d97;
+    --line: #2a3037; --accent: #f2b705; --s1: #3987e5; --s2: #d95926;
+    --crit: #e66767; --crit-bg: #3a1d1d; --good: #3cbf3c; --good-bg: #16301a;
+    --warn-bg: #3a2f12; --warn-ink: #f5c75a; --chip: #232930;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1114; --surface: #171b1f; --ink: #f1f3f5; --ink-2: #b6bec7; --muted: #848d97;
+  --line: #2a3037; --accent: #f2b705; --s1: #3987e5; --s2: #d95926;
+  --crit: #e66767; --crit-bg: #3a1d1d; --good: #3cbf3c; --good-bg: #16301a;
+  --warn-bg: #3a2f12; --warn-ink: #f5c75a; --chip: #232930;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.5 var(--f-body);
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 20px 40px; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.marca { display: flex; align-items: center; gap: 12px; }
+.placa-ico {
+  width: 40px; height: 40px; border-radius: 6px; background: var(--accent);
+  display: grid; place-items: center; font: 700 15px var(--f-display); color: #11161b; letter-spacing: .02em;
+}
+h1 { font: 700 28px/1.1 var(--f-display); margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.sub { color: var(--ink-2); margin: 2px 0 0; font-size: 13px; }
+.aviso { font-size: 12px; color: var(--warn-ink); background: var(--warn-bg); padding: 4px 10px; border-radius: 999px; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.grupo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.rotulo { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-right: 4px; }
+.chip { border: 1px solid var(--line); background: var(--chip); color: var(--ink); font: 500 13px var(--f-body);
+  padding: 5px 12px; border-radius: 999px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.chip:focus-visible, select:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+select { font: 13px var(--f-body); padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 2px; }
+.kpi .rotulo { margin: 0; }
+.kpi .valor { font: 600 30px/1.15 var(--f-display); }
+.kpi .det { font-size: 12.5px; color: var(--ink-2); }
+.neg { color: var(--crit); }
+.pos { color: var(--good); }
+
+.grade { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; }
+.grade.par { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; display: grid; gap: 10px; align-content: start; }
+.card h2 { font: 600 18px/1.2 var(--f-display); margin: 0; letter-spacing: .01em; }
+.card .nota { font-size: 12.5px; color: var(--ink-2); margin: -4px 0 0; }
+.grafico { position: relative; height: 280px; }
+
+.barras { display: grid; gap: 12px; }
+.barra-linha { display: grid; gap: 4px; }
+.barra-topo { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.barra-topo b { font: 600 15px var(--f-display); font-variant-numeric: tabular-nums; }
+.trilho { height: 8px; background: var(--chip); border-radius: 4px; overflow: hidden; }
+.trilho span { display: block; height: 100%; background: var(--s1); border-radius: 0 4px 4px 0; }
+.total-saving { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 10px; font-weight: 600; }
+
+.tabela-box { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+  border-bottom: 1px solid var(--line); padding: 6px 8px; white-space: nowrap; }
+td { border-bottom: 1px solid var(--line); padding: 7px 8px; white-space: nowrap; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); font-size: 12.5px; }
+.placa { font-family: var(--f-mono); font-size: 12px; background: var(--chip); padding: 1px 6px; border-radius: 4px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 2px 9px; border-radius: 999px; }
+.pill.alta { background: var(--crit-bg); color: var(--crit); }
+.pill.baixa { background: var(--chip); color: var(--ink-2); }
+.pill.ok { background: var(--good-bg); color: var(--good); }
+.pill.atencao { background: var(--warn-bg); color: var(--warn-ink); }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+footer { font-size: 12px; color: var(--muted); display: grid; gap: 4px; }
+@media (max-width: 900px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grade, .grade.par { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 420px) {
+  .wrap { padding-inline: 16px; }
+  .kpi .valor { font-size: 26px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="marca">
+      <div class="placa-ico" aria-hidden="true">TL</div>
+      <div>
+        <h1>Painel de Frota TransLog</h1>
+        <p class="sub">Combustível, pedágio e eficiência de 79 veículos · out/2025 a set/2026</p>
+      </div>
+    </div>
+    <span class="aviso">Dados fictícios gerados para portfólio</span>
+  </header>
+
+  <section class="filtros" aria-label="Filtros">
+    <div class="grupo" id="filtro-filial"><span class="rotulo">Filial</span></div>
+    <div class="grupo">
+      <span class="rotulo">Período</span>
+      <select id="de" aria-label="Mês inicial"></select>
+      <span aria-hidden="true">até</span>
+      <select id="ate" aria-label="Mês final"></select>
+    </div>
+  </section>
+
+  <section class="kpis" aria-label="Indicadores">
+    <div class="kpi"><span class="rotulo">Custo total</span><span class="valor" id="k-custo">–</span><span class="det" id="k-custo-det"></span></div>
+    <div class="kpi"><span class="rotulo">Custo por km</span><span class="valor" id="k-cpk">–</span><span class="det" id="k-cpk-det"></span></div>
+    <div class="kpi"><span class="rotulo">km/l da frota</span><span class="valor" id="k-kml">–</span><span class="det" id="k-kml-det"></span></div>
+    <div class="kpi"><span class="rotulo">Saving identificado</span><span class="valor" id="k-sav">–</span><span class="det" id="k-sav-det"></span></div>
+  </section>
+
+  <section class="grade">
+    <div class="card">
+      <h2>Custo mensal</h2>
+      <p class="nota">Combustível e pedágio, em R$ mil.</p>
+      <div class="grafico"><canvas id="g-mensal" aria-label="Custo mensal de combustível e pedágio"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Onde está o dinheiro na mesa</h2>
+      <p class="nota">Perdas evitáveis encontradas pelas consultas SQL e pelo modelo.</p>
+      <div class="barras" id="saving"></div>
+    </div>
+  </section>
+
+  <section class="grade par">
+    <div class="card">
+      <h2>km/l real vs. referência</h2>
+      <p class="nota">Desvio % por tipo de veículo (método do tanque cheio).</p>
+      <div class="grafico"><canvas id="g-kml" aria-label="Desvio de km por litro por tipo de veículo"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Retorno vazio e eixo suspenso</h2>
+      <p class="nota">% das passagens vazias com eixo levantado e o pedágio pago a mais.</p>
+      <div class="tabela-box">
+        <table>
+          <thead><tr><th>Filial</th><th class="n">Conformidade</th><th class="n">Passagens</th><th class="n">Pago a mais</th></tr></thead>
+          <tbody id="t-eixo"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Abastecimentos para auditoria</h2>
+    <p class="nota" id="aud-nota"></p>
+    <div class="tabela-box">
+      <table>
+        <thead><tr><th>Data</th><th>Placa</th><th>Tipo</th><th>Filial</th><th>Motorista</th><th class="n">Litros</th><th class="n">km/l</th><th class="n">Ref.</th><th>Prioridade</th></tr></thead>
+        <tbody id="t-aud"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="grade par">
+    <div class="card">
+      <h2>Motoristas com maior consumo</h2>
+      <p class="nota">Desvio do km/l esperado no período inteiro (consulta q09, NTILE em quartis).</p>
+      <div class="tabela-box">
+        <table>
+          <thead><tr><th>Motorista</th><th>Filial</th><th class="n">km/l</th><th class="n">Desvio</th><th class="n">Eixo</th><th>Quartil</th></tr></thead>
+          <tbody id="t-mot"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Qual método acha mais fraude?</h2>
+      <p class="nota" id="met-nota"></p>
+      <div class="tabela-box">
+        <table>
+          <thead><tr><th>Método</th><th class="n">Apontados</th><th class="n">Precisão</th><th class="n">Recall</th></tr></thead>
+          <tbody id="t-met"></tbody>
+        </table>
+      </div>
+      <p class="nota">Precisão: dos casos apontados, quantos eram fraude. Recall: das fraudes, quantas foram achadas.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Pipeline: Python (pandas, scikit-learn) → SQLite → consultas SQL → este painel e CSVs para Power BI.</span>
+    <span>Empresa, placas, motoristas e valores são inventados.</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D = /*__DADOS__*/null;
+const C = Object.fromEntries(D.colunas.map((c, i) => [c, i]));
+const MESES = [...new Set(D.cubo.map(r => r[C.mes]))].sort();
+const FILIAIS = ["Todas", ...[...new Set(D.cubo.map(r => r[C.filial]))].sort()];
+const NOME_MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const rotMes = m => NOME_MES[+m.slice(5) - 1] + "/" + m.slice(2, 4);
+const brl = (v, d = 0) => "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const num = (v, d = 0) => v.toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const curto = v => v >= 1e6 ? "R$ " + num(v / 1e6, 2) + " mi" : v >= 1e3 ? "R$ " + num(v / 1e3, 1) + " mil" : brl(v);
+
+let estado = { filial: "Todas", de: MESES[0], ate: MESES[MESES.length - 1] };
+try { const s = JSON.parse(localStorage.getItem("painel-frota") || "null"); if (s && MESES.includes(s.de)) estado = s; } catch (e) {}
+const salvar = () => { try { localStorage.setItem("painel-frota", JSON.stringify(estado)); } catch (e) {} };
+
+// ---------- Filtros ----------
+const boxFilial = document.getElementById("filtro-filial");
+FILIAIS.forEach(f => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.type = "button"; b.textContent = f.replace("-SP", "").replace("-MG", "").replace("-PR", "");
+  b.id = "filial-" + f.normalize("NFD").replace(/[^a-zA-Z]/g, "");
+  b.onclick = () => { estado.filial = f; salvar(); render(); };
+  b.dataset.f = f; boxFilial.appendChild(b);
+});
+["de", "ate"].forEach(id => {
+  const s = document.getElementById(id);
+  MESES.forEach(m => s.add(new Option(rotMes(m), m)));
+  s.onchange = () => {
+    estado[id] = s.value;
+    if (estado.de > estado.ate) { if (id === "de") estado.ate = estado.de; else estado.de = estado.ate; }
+    salvar(); render();
+  };
+});
+
+const passa = (mes, filial) => mes >= estado.de && mes <= estado.ate && (estado.filial === "Todas" || filial === estado.filial);
+const soma = (linhas, col) => linhas.reduce((a, r) => a + r[C[col]], 0);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+let gMensal, gKml;
+
+function render() {
+  document.querySelectorAll("#filtro-filial .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === estado.filial));
+  document.getElementById("de").value = estado.de;
+  document.getElementById("ate").value = estado.ate;
+
+  const L = D.cubo.filter(r => passa(r[C.mes], r[C.filial]));
+  const km = soma(L, "km"), comb = soma(L, "comb"), ped = soma(L, "ped");
+  const kmV = soma(L, "km_valido"), litV = soma(L, "litros_valido"), esp = soma(L, "km_esp_litros");
+  const kml = kmV / litV, kmlEsp = kmV / esp, desvio = kml / kmlEsp - 1;
+  const perda = soma(L, "perda_eixo"), dup = soma(L, "dup"), exc = soma(L, "excesso");
+  const saving = perda + dup + exc;
+
+  // KPIs
+  document.getElementById("k-custo").textContent = curto(comb + ped);
+  document.getElementById("k-custo-det").textContent = `${num(100 * comb / (comb + ped), 0)}% combustível · ${num(soma(L, "viagens"))} viagens`;
+  document.getElementById("k-cpk").textContent = brl((comb + ped) / km, 2);
+  document.getElementById("k-cpk-det").textContent = `${num(km / 1e6, 2)} milhões de km rodados`;
+  document.getElementById("k-kml").textContent = num(kml, 2);
+  const det = document.getElementById("k-kml-det");
+  det.innerHTML = `esperado ${num(kmlEsp, 2)} · <span class="${desvio < 0 ? "neg" : "pos"}">${desvio < 0 ? "▼" : "▲"} ${num(Math.abs(desvio) * 100, 1)}%</span>`;
+  document.getElementById("k-sav").textContent = curto(saving);
+  document.getElementById("k-sav-det").textContent = `${num(100 * saving / (comb + ped), 2)}% do custo total`;
+
+  // Saving por frente (barras em HTML)
+  const frentes = [
+    ["Combustível acima do consumo esperado", exc, soma(L, "n_excesso") + " abastecimentos"],
+    ["Retorno vazio sem suspender eixo", perda, num(soma(L, "nao_susp")) + " passagens"],
+    ["Pedágio cobrado em duplicidade", dup, soma(L, "n_dup") + " cobranças para contestar"],
+  ].sort((a, b) => b[1] - a[1]);
+  const max = Math.max(...frentes.map(f => f[1]), 1);
+  document.getElementById("saving").innerHTML = frentes.map(([n, v, q]) => `
+    <div class="barra-linha">
+      <div class="barra-topo"><span>${n}<br><small style="color:var(--muted)">${q}</small></span><b>${brl(v)}</b></div>
+      <div class="trilho"><span style="width:${(100 * v / max).toFixed(1)}%"></span></div>
+    </div>`).join("") + `<div class="total-saving"><span>Total</span><span>${brl(saving)}</span></div>`;
+
+  // Custo mensal
+  const meses = MESES.filter(m => m >= estado.de && m <= estado.ate);
+  const porMes = col => meses.map(m => soma(L.filter(r => r[C.mes] === m), col) / 1000);
+  desenharMensal(meses.map(rotMes), porMes("comb"), porMes("ped"));
+
+  // km/l por tipo
+  const tipos = [...new Set(L.map(r => r[C.tipo]))];
+  const dTipo = tipos.map(t => {
+    const T = L.filter(r => r[C.tipo] === t);
+    const kv = soma(T, "km_valido");
+    return [t, 100 * ((kv / soma(T, "litros_valido")) / (kv / soma(T, "km_esp_litros")) - 1)];
+  }).sort((a, b) => a[1] - b[1]);
+  desenharKml(dTipo.map(d => d[0]), dTipo.map(d => +d[1].toFixed(1)));
+
+  // Eixo por filial
+  const fil = [...new Set(L.map(r => r[C.filial]))].sort();
+  document.getElementById("t-eixo").innerHTML = fil.map(f => {
+    const F = L.filter(r => r[C.filial] === f);
+    const el = soma(F, "eleg"), ns = soma(F, "nao_susp"), conf = el ? 100 * (el - ns) / el : 0;
+    const cls = conf >= 80 ? "ok" : conf >= 70 ? "atencao" : "alta";
+    const txt = conf >= 80 ? "Boa" : conf >= 70 ? "Atenção" : "Baixa";
+    return `<tr><td>${f}</td><td class="n"><span class="pill ${cls}">${txt} ${num(conf, 1)}%</span></td><td class="n">${num(el)}</td><td class="n">${brl(soma(F, "perda_eixo"))}</td></tr>`;
+  }).join("");
+
+  // Auditoria
+  const aud = D.auditoria.filter(a => passa(a.mes, a.filial));
+  const altas = aud.filter(a => a.qtd_metodos >= 2).length;
+  document.getElementById("aud-nota").textContent =
+    `${aud.length} abastecimentos apontados por pelo menos um método; ${altas} com prioridade alta (2 ou 3 métodos concordam). Mostrando os 12 primeiros.`;
+  document.getElementById("t-aud").innerHTML = aud.slice(0, 12).map(a => `
+    <tr><td>${a.data_hora.slice(8, 10)}/${a.data_hora.slice(5, 7)}/${a.data_hora.slice(2, 4)}</td>
+    <td><span class="placa">${a.placa}</span></td><td>${a.tipo_veiculo}</td><td>${a.filial}</td><td>${a.nome}</td>
+    <td class="n">${num(a.litros, 0)}</td><td class="n">${num(a.km_l_real, 2)}</td><td class="n">${num(a.km_l_referencia, 1)}</td>
+    <td><span class="pill ${a.qtd_metodos >= 2 ? "alta" : "baixa"}">${a.qtd_metodos >= 2 ? "Alta" : "Baixa"} · ${a.qtd_metodos}/3</span></td></tr>`).join("")
+    || `<tr><td colspan="9" style="color:var(--muted)">Nenhum abastecimento suspeito neste filtro.</td></tr>`;
+
+  // Motoristas (piores desvios)
+  const mot = D.motoristas.filter(m => estado.filial === "Todas" || m.filial === estado.filial)
+    .sort((a, b) => a.desvio_consumo_pct - b.desvio_consumo_pct).slice(0, 8);
+  document.getElementById("t-mot").innerHTML = mot.map(m => `
+    <tr><td>${m.nome}</td><td>${m.filial.replace(/-..$/, "")}</td><td class="n">${num(m.km_l_real, 2)}</td>
+    <td class="n neg">${num(m.desvio_consumo_pct, 1)}%</td><td class="n">${m.pct_conformidade_eixo ? num(m.pct_conformidade_eixo, 0) + "%" : "–"}</td>
+    <td><span class="pill ${m.quartil_eficiencia === 4 ? "alta" : m.quartil_eficiencia === 3 ? "atencao" : "baixa"}">Q${m.quartil_eficiencia}</span></td></tr>`).join("");
+}
+
+function corTexto() { return { muted: css("--muted"), line: css("--line"), ink2: css("--ink-2") }; }
+
+function baseOpcoes(extra) {
+  const t = corTexto();
+  return Object.assign({
+    responsive: true, maintainAspectRatio: false, animation: { duration: 250 },
+    plugins: { legend: { labels: { color: t.ink2, boxWidth: 12, boxHeight: 12, font: { family: "IBM Plex Sans" } } },
+               tooltip: { intersect: false } },
+  }, extra);
+}
+
+function desenharMensal(labels, comb, ped) {
+  const t = corTexto();
+  gMensal && gMensal.destroy();
+  gMensal = new Chart(document.getElementById("g-mensal"), {
+    type: "bar",
+    data: { labels, datasets: [
+      { label: "Combustível", data: comb, backgroundColor: css("--s1"), borderRadius: { topLeft: 0, topRight: 0 }, borderSkipped: false, borderColor: css("--surface"), borderWidth: { top: 2 } },
+      { label: "Pedágio", data: ped, backgroundColor: css("--s2"), borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: false },
+    ] },
+    options: baseOpcoes({
+      interaction: { mode: "index", intersect: false },
+      plugins: { legend: { position: "top", align: "start", labels: { color: t.ink2, boxWidth: 12, boxHeight: 12 } },
+        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: R$ ${num(c.raw, 1)} mil` } } },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: t.muted }, border: { color: t.line } },
+        y: { stacked: true, grid: { color: t.line }, ticks: { color: t.muted, callback: v => num(v) }, border: { display: false } },
+      },
+    }),
+  });
+}
+
+function desenharKml(labels, valores) {
+  const t = corTexto();
+  gKml && gKml.destroy();
+  gKml = new Chart(document.getElementById("g-kml"), {
+    type: "bar",
+    data: { labels, datasets: [{ label: "Desvio %", data: valores, backgroundColor: css("--s1"), borderRadius: 4, barPercentage: 0.6 }] },
+    options: baseOpcoes({
+      indexAxis: "y",
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${num(c.raw, 1)}% vs. referência` } } },
+      scales: {
+        x: { grid: { color: t.line }, ticks: { color: t.muted, callback: v => v + "%" }, border: { display: false } },
+        y: { grid: { display: false }, ticks: { color: t.ink2 }, border: { color: t.line } },
+      },
+    }),
+  });
+}
+
+// Métodos (tabela estática)
+document.getElementById("met-nota").textContent =
+  `Comparação com o gabarito de ${D.fraudes_gabarito} abastecimentos inflados de propósito na geração dos dados.`;
+document.getElementById("t-met").innerHTML = D.metodos.map((m, i) => `
+  <tr${i === D.metodos.length - 1 ? ' style="font-weight:600"' : ""}><td>${m.metodo}</td><td class="n">${m.casos_apontados}</td>
+  <td class="n">${num(m.precisao * 100, 0)}%</td><td class="n">${num(m.recall * 100, 0)}%</td></tr>`).join("");
+
+render();
+// Redesenha os gráficos quando o tema claro/escuro muda
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>
